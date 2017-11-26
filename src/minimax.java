@@ -6,6 +6,7 @@ import java.util.Arrays;
  */
 public class minimax {
     double time;
+    /**
     String boardToString(char[][] board){
         String result = "\t1 2 3 4 5 6 7 8\n";
         int r = 65;
@@ -19,6 +20,7 @@ public class minimax {
         }
         return result;
     }
+     **/
     public char checkWin(char[][] board, int r, int c){
         char result = 'N';
         char symbol = board[r][c];
