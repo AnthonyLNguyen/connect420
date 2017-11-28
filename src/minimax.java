@@ -144,12 +144,14 @@ public class minimax {
         return result;
     }
 
-    public int calcUtil2(char[][] b, char playerSymbol){
+    public int calcUtil2(char[][] b, char playerSymbol, char oppSymbol){
         int result = 0;
         for (int i = 0; i < b.length; i++){
             for (int j = 0; j < b[0].length; j++){
                 if (b[i][j] == playerSymbol)
                     result += utility2(b, i, j, playerSymbol);
+                if (b[i][j] == oppSymbol)
+                    result -= utility2(b, i, j, oppSymbol);
             }
         }
         return result;
