@@ -17,6 +17,17 @@ public class Board {
         board[r][c] = t;
     }
 
+    public boolean placeTile(char r, int c, char t){
+        if (r < 97)
+            r += 32;
+        r -= 97;
+        c--;
+        if(board[r][c] != '-')
+            return false;
+        board[r][c] = t;
+        return true;
+    }
+
     public void parceMove(String move){
         board[Character.toUpperCase(move.charAt(0)) - 65][Character.getNumericValue(move.charAt(1)) - 1] = moveMarker;
     }
@@ -37,5 +48,9 @@ public class Board {
 
     public char[][] getArray(){
         return board;
+    }
+
+    public void setBoard(char[][] board) {
+        this.board = board;
     }
 }

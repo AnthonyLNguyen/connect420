@@ -180,47 +180,63 @@ public class minimax {
         return true;
     }
 
-    int abSearch(char[][] state){ // just copied pseudocode . these dont actually work yetc
-        time = System.nanoTime();
-        int v = maxValue(state,Integer.MIN_VALUE,Integer.MAX_VALUE);
-        return v;
-    }
-
-    private int maxValue(char[][] state, int a, int b) { // just copied pseudocode . these dont actually work yetc
-        if (terminalTest(state) || System.nanoTime() - time > 5e9)
-            return calcUtil(state,'X');
-        int v = Integer.MIN_VALUE;
-        for (char[][] s:generateSucc(state,'X')) {
-            v = Integer.max(v,minValue(s,a,b));
-            if (v >= b)
-                return v;
-            a = Integer.max(a,v);
+    int alphabeta(Board b,Node n, int depth, int alpha, int beta, boolean maxPlayer){
+        if (depth == 0 || terminalTest(n.getBoard())){
+            return calcUtil(n.getBoard(),'X');
         }
-        return v;
-    }
-
-    private int minValue(char[][] state, int a, int b) {// just copied pseudocode . these dont actually work yetc
-        if (terminalTest(state) || System.nanoTime() - time > 5e9)
-            return calcUtil(state,'O');
-        int v = Integer.MIN_VALUE;
-        for (char[][] s:generateSucc(state,'0')) {
-            v = Integer.max(v,maxValue(s,a,b));
-            if (v <= a)
-                return v;
-            b = Integer.min(b,v);
+        if(maxPlayer){
+            int v = Integer.MIN_VALUE;
+            ArrayList<Node> succ = generateSucc(n,'X');
+            for (Node child: succ) {
+                v = Integer.max(v,alphabeta(b,child,depth-1,alpha,beta,false));
+                alpha = Integer.max(alpha,v);
+                if (beta <= alpha)
+                    break;
+            }
+            return v;
         }
-        return v;
+        else{
+            int v = Integer.MAX_VALUE;
+            ArrayList<Node> succ = generateSucc(n,'O');
+            for (Node child: succ) {
+                v = Integer.min(v,alphabeta(b,child,depth-1,alpha,beta,true));
+                beta = Integer.min(beta,v);
+                if (beta <= alpha)
+                    break;
+            }
+            return v;
+        }
     }
 
-    public ArrayList<char[][]> generateSucc(char[][] state, char sym){
-        ArrayList<char[][]> result = new ArrayList<>();
+
+    void makeMove(Board b){
+        ArrayList<Node> succ = generateSucc(new Node(null,b.getArray()),'X');
+        int max = -1;
+        int val;
+        for (Node n:succ) {
+            val = alphabeta(b,n,4,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
+            if (val > max)
+                max = val;
+            n.setValue(val);
+        }
+        for (Node n:succ) {
+            if (n.getValue() == max) {
+                b.setBoard(n.getBoard());
+                break;
+            }
+        }
+    }
+
+
+    public ArrayList<Node> generateSucc(Node state, char sym){
+        ArrayList<Node> result = new ArrayList<>();
         char[][] temp;
-        for (int i = 0; i < state.length; i++) {
-            for (int j = 0; j < state[0].length; j++) {
-                temp = deepCopy(state);
-                if (temp[i][j] == '-') {
+        for (int i = 0; i < state.getBoard().length; i++) {
+            for (int j = 0; j < state.getBoard().length; j++) {
+                if (state.getBoard()[i][j] == '-') {
+                    temp = deepCopy(state.getBoard());
                     temp[i][j] = sym;
-                    result.add(temp);
+                    result.add(new Node(state,temp));
                 }
             }
         }
@@ -237,6 +253,9 @@ public class minimax {
         }
         return result;
     }
+
+
+
 
 
 }
