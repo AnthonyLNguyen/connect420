@@ -77,12 +77,78 @@ public class minimax {
         }
         return maxCount;
     } //not sure how to calculate utility
+
+
+    public int utility2(char[][] board, int r, int c, char symbol){
+        int count = 0;
+        int result = 0;
+        for (int i=0;i<board.length;i++)
+        {
+            if (board[r][i]==symbol)
+                count++;
+            else if (board[r][i] == '-'){
+                if (count == 1) {
+                    if (i < 6 &&  board[r][i + 1] == symbol) {
+                        count++;
+                        if (board[r][i + 2] == symbol)
+                            count++;
+                    }
+                } else if (count == 2){
+                    if (i < 7 && board[r][i + 1] == symbol){
+                        count++;
+                    }
+                }
+            } else {
+                result += (int)Math.pow(10, count);
+                count = 0;
+            }
+            if (count>=4)
+                return 10000000;
+        }
+
+        for (int i=0;i<board[0].length;i++)
+        {
+            if (board[i][c]==symbol)
+                count++;
+            else if (board[i][c] == '-'){
+                if (count == 1) {
+                    if (i < 6 &&  board[i + 1][c] == symbol) {
+                        count++;
+                        if (board[r][i + 2] == symbol)
+                            count++;
+                    }
+                } else if (count == 2){
+                    if (i < 7 && board[i + 1][c] == symbol){
+                        count++;
+                    }
+                }
+            } else {
+                result += (int)Math.pow(10, count);
+                count = 0;
+            }
+            if (count>=4)
+                return 10000000;
+        }
+        return result;
+    }
+
     public int calcUtil(char[][] b, char symbol){
         int result = 0;
         for (int i = 0; i < b.length; i++){
             for (int j = 0; j < b[0].length; j++){
                 if (b[i][j] == symbol)
-                    result = (int)Math.pow(10,utility(b, i, j, symbol));
+                    result += (int)Math.pow(10,utility(b, i, j, symbol));
+            }
+        }
+        return result;
+    }
+
+    public int calcUtil2(char[][] b, char playerSymbol){
+        int result = 0;
+        for (int i = 0; i < b.length; i++){
+            for (int j = 0; j < b[0].length; j++){
+                if (b[i][j] == playerSymbol)
+                    result += utility2(b, i, j, playerSymbol);
             }
         }
         return result;
