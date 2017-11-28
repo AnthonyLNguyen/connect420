@@ -11,8 +11,9 @@ public class main {
 
         //ui.getBoard().placeTile('e',5,'O');
         //ui.getBoard().placeTile('e',4,'X');
-        ui.getBoard().placeTile('a',4,'X');
-        ui.getBoard().placeTile('g',4,'X');
+        ui.getBoard().placeTile('A',1,'X');
+        ui.getBoard().placeTile('A',2,'X');
+        ui.getBoard().placeTile('A',4,'X');
         //ui.getBoard().placeTile('e',2,'X');
         ///ui.getBoard().placeTile('e',1,'O');
         ui.printBoard();
