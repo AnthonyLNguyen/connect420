@@ -161,14 +161,14 @@ public class minimax {
             for (int j = 0; j < b[0].length; j++){
                 if (b[i][j] == playerSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
-                    if (temp >= 10000000)
-                        return 10000000;
+                    //if (temp >= 10000000)
+                        //return 10000000;
                     result += temp;
                 }
                 if (b[i][j] == oppSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
-                    if (temp >= 10000000)
-                        return -10000000;
+                    //if (temp >= 10000000)
+                        //return -10000000;
                     result -= temp;
                 }
             }
