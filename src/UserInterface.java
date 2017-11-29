@@ -23,8 +23,9 @@ public class UserInterface {
     }
 
     public void makeMove(String move){
+        getBoard().parseMove(move);
         String temp = move;
-        while (!getBoard().parceMove(temp)){
+        while (!getBoard().parseMove(temp)){
             System.out.println("Invalid move assignment. Choose again!");
             temp = s.next();
         }
@@ -51,4 +52,7 @@ public class UserInterface {
         return choice;
     }
 
+    public void printMoves() {
+        System.out.println(b.movesToString());
+    }
 }

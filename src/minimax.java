@@ -5,11 +5,12 @@ import java.util.Arrays;
  * Created by antho on 11/24/2017.
  */
 public class minimax {
-    long time;
 
     public minimax(int t){
     }
 
+    long time;
+    double maxTime = 3;
     /**
     String boardToString(char[][] board){
         String result = "\t1 2 3 4 5 6 7 8\n";
@@ -169,25 +170,25 @@ public class minimax {
     }
 
     double evaluate(char[][] board, char symbol, char enemy) {
-        int threeRow = nearWinRows(board, 1,symbol);
-        int twoRow = nearWinRows(board, 2,symbol);
-        int twoCol = nearWinCols(board, 2,symbol);
-        int threeCol = nearWinCols(board, 1,symbol);
-        int fourRow = nearWinRows(board,0,symbol);
-        int fourCol = nearWinCols(board,0,symbol);
+        int threeRow = numRows(board, 1,symbol);
+        int twoRow = numRows(board, 2,symbol);
+        int twoCol = numCols(board, 2,symbol);
+        int threeCol = numCols(board, 1,symbol);
+        int fourRow = numRows(board,0,symbol);
+        int fourCol = numCols(board,0,symbol);
         double score = Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);
-        /*threeRow = nearWinRows(board, 1,enemy);
-        twoRow = nearWinRows(board, 2,enemy);
-        twoCol = nearWinCols(board, 2,enemy);
-        threeCol = nearWinCols(board, 1,enemy);
-        fourRow = nearWinRows(board,0,enemy);
-        fourCol = nearWinCols(board,0,enemy);
+        /*threeRow = numRows(board, 1,enemy);
+        twoRow = numRows(board, 2,enemy);
+        twoCol = numCols(board, 2,enemy);
+        threeCol = numCols(board, 1,enemy);
+        fourRow = numRows(board,0,enemy);
+        fourCol = numCols(board,0,enemy);
         score -= Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);*/
         return score;
     }
 
 
-    private int nearWinRows(char[][] board , int away,char symbol) {
+    private int numRows(char[][] board , int away, char symbol) {
         int count = 0;
         int length = 4 - away;
         String match1 = strMatch(symbol, length);
@@ -213,7 +214,7 @@ public class minimax {
         return count;
     }
 
-    private int nearWinCols(char[][] board, int away, char symbol) {
+    private int numCols(char[][] board, int away, char symbol) {
         int count = 0;
         int length = 4 - away;
         String match1 = strMatch(symbol, length);
@@ -321,33 +322,56 @@ public class minimax {
 
 
     void makeMove(Board b, int depth){
+        time = System.currentTimeMillis();
         ArrayList<Node> succ = generateSucc(new Node(null,b.getArray()),'X');
         int max = -1;
         int val;
         for (Node n:succ) {
+            if (System.currentTimeMillis()-time < maxTime*1000) {
             val = alphabeta(b,n,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
             if (val > max)
                 max = val;
             n.setValue(val);
+            }
         }
         for (Node n:succ) {
             if (n.getValue() == max) {
                 if(xWin(n.getBoard())){
+                    b.myMove(n.getBoard());
                     b.setBoard(n.getBoard());
                     break;
                 }
+                b.myMove(n.getBoard());
                 b.setBoard(n.getBoard());
+                break;
             }
         }
     }
 
+
+    public int checkAdjEdges(Node state,int i, int j){
+        int result = 0;
+        if (i > 0)
+            if(state.getBoard()[i-1][j] == 'X' || state.getBoard()[i-1][j] == 'O')
+            result++;
+        if (i < 7)
+            if(state.getBoard()[i+1][j] == 'X' || state.getBoard()[i+1][j] == 'O')
+            result++;
+        if (j > 0)
+            if(state.getBoard()[i][j-1] == 'X' || state.getBoard()[i][j-1] == 'O')
+            result++;
+        if (j < 7)
+            if(state.getBoard()[i][j+1] == 'X' || state.getBoard()[i][j+1] == 'O')
+            result++;
+        return result;
+    }
 
     public ArrayList<Node> generateSucc(Node state, char sym){
         ArrayList<Node> result = new ArrayList<>();
         char[][] temp;
         for (int i = 0; i < state.getBoard().length; i++) {
             for (int j = 0; j < state.getBoard().length; j++) {
-                if (state.getBoard()[i][j] == '-') {
+                if (state.getBoard()[i][j] == '-' && checkAdjEdges(state,i,j) > 0) {
                     temp = deepCopy(state.getBoard());
                     temp[i][j] = sym;
                     result.add(new Node(state,temp));

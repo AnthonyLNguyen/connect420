@@ -12,10 +12,12 @@ public class main {
             ui.printBoard();
         }
         while (!m.xWin(ui.getBoard().getArray()) && !m.oWin(ui.getBoard().getArray())){
-            m.makeMove(ui.getBoard(), 4);
+            m.makeMove(ui.getBoard(), 6);
             ui.printBoard();
+            ui.printMoves();
             ui.makeMove(ui.getNextMove());
             ui.printBoard();
+
         }
 
         /*//ui.getBoard().placeTile('e',5,'O');
