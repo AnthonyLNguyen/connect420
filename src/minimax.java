@@ -100,8 +100,8 @@ public class minimax {
                 }
                 if (count != 0)
                     result += (int) Math.pow(10, count);
+            } else
                 count = 0;
-            }
             if (count>=4)
                 return 10000000;
         }
@@ -124,11 +124,13 @@ public class minimax {
                 }
                 if (count != 0)
                     result += (int) Math.pow(10, count);
+            } else
                 count = 0;
+            if (count>=4) {
 
-            }
-            if (count>=4)
+                System.out.println(r + " " + c);
                 return 10000000;
+            }
         }
         return result;
     }
