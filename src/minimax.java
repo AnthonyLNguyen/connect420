@@ -5,7 +5,11 @@ import java.util.Arrays;
  * Created by antho on 11/24/2017.
  */
 public class minimax {
-    double time;
+    long time;
+
+    public minimax(int t){
+    }
+
     /**
     String boardToString(char[][] board){
         String result = "\t1 2 3 4 5 6 7 8\n";
@@ -78,36 +82,33 @@ public class minimax {
         return maxCount;
     } //not sure how to calculate utility
 
-
-    public int[] utility2(char[][] board, int r, int c, char symbol){
+    public int utility2(char[][] board, int r, int c, char symbol){
         int count = 0;
-        int [] ret = new int[3];
+        int result = 0;
         for (int i=c;i<board.length && i < c + 4;i++)
         {
             if (board[r][i]==symbol) {
                 count++;
-                ret[0] = i;
                 if (count>=4) {
-                    ret[2] = 10000000;
-                    return ret;
+                    return 10000000;
                 }
             }
             else if (board[r][i] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[r][i + 1] == symbol) {
-                        ret[2] -= 100;
+                        result -= 100;
                         count++;
                         if (board[r][i + 2] == symbol)
                             count++;
                     }
                 } else if (count == 2){
                     if (i < 7 && board[r][i + 1] == symbol){
-                        ret[2] -= 100;
+                        result -= 100;
                         count++;
                     }
                 }
                 if (count != 0)
-                    ret[2] += (int) Math.pow(10, count);
+                    result += (int) Math.pow(10, count);
                 count = 0;
             } else
                 count = 0;
@@ -117,55 +118,51 @@ public class minimax {
         for (int i=r;i<board.length && i < r + 4;i++)
         {
             if (board[i][c]==symbol) {
-                ret[1] = i;
                 count++;
                 if (count == 4) {
-                    ret[2] = 10000000;
-                    return ret;
+                    return result;
                 }
             }
             else if (board[i][c] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[i + 1][c] == symbol) {
-                        ret[2] -= 100;
+                        result -= 100;
                         count++;
                         if (board[i + 2][c] == symbol)
                             count++;
                     }
                 } else if (count == 2){
                     if (i < 7 && board[i + 1][c] == symbol){
-                        ret[2] -= 100;
+                        result -= 100;
                         count++;
                     }
                 }
                 if (count != 0)
-                    ret[2] += (int) Math.pow(10, count);
+                    result += (int) Math.pow(10, count);
                 count = 0;
             } else
                 count = 0;
         }
-        return ret;
+        return result;
     }
 
     public int calcUtil2(char[][] b, char playerSymbol, char oppSymbol){
         int result = 0;
-        int[] temp = null;
+        int temp = 0;
         for (int i = 0; i < b.length; i++){
             for (int j = 0; j < b[0].length; j++){
                 if (b[i][j] == playerSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
                     //if (temp >= 10000000)
                     //return 10000000;
-                    result += temp[2];
-                    j = temp[0];
-                    i = temp[1];
+                    result += temp;
                 }
-                /*if (b[i][j] == oppSymbol) {
+                if (b[i][j] == oppSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
                     //if (temp >= 10000000)
                         //return -10000000;
-                    result -= temp[2];
-                }*/
+                    result -= temp;
+                }
             }
         }
         return result;
@@ -273,6 +270,18 @@ public class minimax {
             for (int j = 0; j < b[0].length; j++){
                 winner = checkWin(b,i,j);
                 if (winner == 'X')
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean oWin(char[][] b){ // check if this is a winning state
+        char winner;
+        for (int i = 0; i < b.length; i++){
+            for (int j = 0; j < b[0].length; j++){
+                winner = checkWin(b,i,j);
+                if (winner == 'O')
                     return true;
             }
         }

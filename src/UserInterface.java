@@ -7,7 +7,7 @@ public class UserInterface {
 
     public UserInterface() {
         s = new Scanner(System.in);
-        b = new Board('X');
+        b = new Board('O');
     }
 
     public String getNextMove() {
@@ -32,14 +32,17 @@ public class UserInterface {
         System.out.println(b.boardToString());
     }
 
-    public boolean startup(){
+    public boolean getWhoMoves(){
         System.out.println("Welcome to 4-in-a-line");
         System.out.println("Who will move first?\n\t1)Player\n\t2)Opponent");
         int choice = s.nextInt();
-        if (choice == 1)
-            return true;
-        return false;
+        return choice == 1;
     }
 
+    public int startup(){
+        System.out.println("How much time for move calculation?");
+        int choice = s.nextInt();
+        return choice;
+    }
 
 }
