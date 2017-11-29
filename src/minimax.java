@@ -179,13 +179,13 @@ public class minimax {
         int fourRow = nearWinRows(board,0,symbol);
         int fourCol = nearWinCols(board,0,symbol);
         double score = Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);
-        threeRow = nearWinRows(board, 1,enemy);
+        /*threeRow = nearWinRows(board, 1,enemy);
         twoRow = nearWinRows(board, 2,enemy);
         twoCol = nearWinCols(board, 2,enemy);
         threeCol = nearWinCols(board, 1,enemy);
         fourRow = nearWinRows(board,0,enemy);
         fourCol = nearWinCols(board,0,enemy);
-        score -= Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);
+        score -= Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);*/
         return score;
     }
 
