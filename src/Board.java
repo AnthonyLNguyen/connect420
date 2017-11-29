@@ -87,6 +87,9 @@ public class Board {
     }
 
 
+    boolean isFull(){
+        return (moveCount == 32);
+    }
 
 
     public char[][] getArray(){

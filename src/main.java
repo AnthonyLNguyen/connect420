@@ -17,13 +17,16 @@ public class main {
             ui.printMoves(playFirst);
             ui.makeMove(ui.getNextMove());
             ui.printBoard();
-
+            if(ui.getBoard().isFull())
+                break;
         }
 
         if (m.xWin(ui.getBoard().getArray()))
             System.out.println("X won!");
-        else
+        if (m.oWin(ui.getBoard().getArray()))
             System.out.println("Y won!");
+        else
+            System.out.println("Tie Game!");
 
         /*//ui.getBoard().placeTile('e',5,'O');
         //ui.getBoard().placeTile('e',4,'X');
