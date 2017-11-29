@@ -79,68 +79,72 @@ public class minimax {
     } //not sure how to calculate utility
 
 
-    public int utility2(char[][] board, int r, int c, char symbol){
+    public int[] utility2(char[][] board, int r, int c, char symbol){
         int count = 0;
-        int result = 0;
-        for (int i=c;i<board.length;i++)
+        int [] ret = new int[3];
+        for (int i=c;i<board.length && i < c + 4;i++)
         {
             if (board[r][i]==symbol) {
                 count++;
-                if (count>=4)
-                    return 10000000;
+                ret[0] = i;
+                if (count>=4) {
+                    ret[2] = 10000000;
+                    return ret;
+                }
             }
             else if (board[r][i] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[r][i + 1] == symbol) {
-                        result -= 100;
+                        ret[2] -= 100;
                         count++;
                         if (board[r][i + 2] == symbol)
                             count++;
                     }
                 } else if (count == 2){
                     if (i < 7 && board[r][i + 1] == symbol){
-                        result -= 100;
+                        ret[2] -= 100;
                         count++;
                     }
                 }
                 if (count != 0)
-                    result += (int) Math.pow(10, count);
+                    ret[2] += (int) Math.pow(10, count);
                 count = 0;
             } else
                 count = 0;
 
         }
         count = 0;
-        for (int i=r;i<board.length;i++)
+        for (int i=r;i<board.length && i < r + 4;i++)
         {
             if (board[i][c]==symbol) {
+                ret[1] = i;
                 count++;
                 if (count == 4) {
-                   // System.out.println(r + " " + c);
-                    return 10000000;
+                    ret[2] = 10000000;
+                    return ret;
                 }
             }
             else if (board[i][c] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[i + 1][c] == symbol) {
-                        result -= 100;
+                        ret[2] -= 100;
                         count++;
                         if (board[i + 2][c] == symbol)
                             count++;
                     }
                 } else if (count == 2){
                     if (i < 7 && board[i + 1][c] == symbol){
-                        result -= 100;
+                        ret[2] -= 100;
                         count++;
                     }
                 }
                 if (count != 0)
-                    result += (int) Math.pow(10, count);
+                    ret[2] += (int) Math.pow(10, count);
                 count = 0;
             } else
                 count = 0;
         }
-        return result;
+        return ret;
     }
 
     public int calcUtil(char[][] b, char symbol){
@@ -156,21 +160,23 @@ public class minimax {
 
     public int calcUtil2(char[][] b, char playerSymbol, char oppSymbol){
         int result = 0;
-        int temp = 0;
+        int[] temp = null;
         for (int i = 0; i < b.length; i++){
             for (int j = 0; j < b[0].length; j++){
                 if (b[i][j] == playerSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
                     //if (temp >= 10000000)
                         //return 10000000;
-                    result += temp;
+                    result += temp[2];
+                    j = temp[0];
+                    i = temp[1];
                 }
-                if (b[i][j] == oppSymbol) {
+                /*if (b[i][j] == oppSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
                     //if (temp >= 10000000)
                         //return -10000000;
-                    result -= temp;
-                }
+                    result -= temp[2];
+                }*/
             }
         }
         return result;
