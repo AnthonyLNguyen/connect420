@@ -105,6 +105,7 @@ public class minimax {
                 }
                 if (count != 0)
                     result += (int) Math.pow(10, count);
+                count = 0;
             } else
                 count = 0;
 
@@ -122,17 +123,20 @@ public class minimax {
             else if (board[i][c] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[i + 1][c] == symbol) {
+                        result -= 100;
                         count++;
                         if (board[i + 2][c] == symbol)
                             count++;
                     }
                 } else if (count == 2){
                     if (i < 7 && board[i + 1][c] == symbol){
+                        result -= 60;
                         count++;
                     }
                 }
                 if (count != 0)
                     result += (int) Math.pow(10, count);
+                count = 0;
             } else
                 count = 0;
         }
