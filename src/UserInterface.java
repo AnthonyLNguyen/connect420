@@ -23,7 +23,6 @@ public class UserInterface {
     }
 
     public void makeMove(String move){
-        getBoard().parseMove(move);
         String temp = move;
         while (!getBoard().parseMove(temp)){
             System.out.println("Invalid move assignment. Choose again!");

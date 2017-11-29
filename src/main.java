@@ -20,6 +20,11 @@ public class main {
 
         }
 
+        if (m.xWin(ui.getBoard().getArray()))
+            System.out.println("X won!");
+        else
+            System.out.println("Y won!");
+
         /*//ui.getBoard().placeTile('e',5,'O');
         //ui.getBoard().placeTile('e',4,'X');
 
