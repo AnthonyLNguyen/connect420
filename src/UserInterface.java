@@ -51,7 +51,11 @@ public class UserInterface {
         return choice;
     }
 
-    public void printMoves() {
-        System.out.println(b.movesToString());
+    public void printMoves(boolean playFirst) {
+        if (playFirst)
+            System.out.println("Player vs. Opponent");
+        else
+            System.out.println("Opponent vs. Player");
+        System.out.println(b.movesToString(playFirst));
     }
 }

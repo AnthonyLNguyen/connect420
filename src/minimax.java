@@ -378,6 +378,11 @@ public class minimax {
                 }
             }
         }
+        if (result.isEmpty()) {
+            temp = deepCopy(state.getBoard());
+            temp[4][4] = 'X';
+            result.add(new Node(state,temp));
+        }
         return result;
     }
 

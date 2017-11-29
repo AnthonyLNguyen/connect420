@@ -6,15 +6,15 @@ public class main {
         UserInterface ui = new UserInterface();
 
         minimax m = new minimax(ui.startup());
-
-        if (!ui.getWhoMoves()) {
+        boolean playFirst = ui.getWhoMoves();
+        if (!playFirst) {
             ui.makeMove(ui.getNextMove());
             ui.printBoard();
         }
         while (!m.xWin(ui.getBoard().getArray()) && !m.oWin(ui.getBoard().getArray())){
             m.makeMove(ui.getBoard(), 6);
             ui.printBoard();
-            ui.printMoves();
+            ui.printMoves(playFirst);
             ui.makeMove(ui.getNextMove());
             ui.printBoard();
 

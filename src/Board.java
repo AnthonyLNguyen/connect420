@@ -4,6 +4,8 @@ public class Board {
     private char moveMarker;
     private int moveCount = 0;
     private String moves = "";
+    private String myMove;
+    private String oppMove;
 
     public Board (char mm) {
         moveMarker = mm;
@@ -32,12 +34,26 @@ public class Board {
 
     public boolean parseMove(String move) {
         if (board[Character.toUpperCase(move.charAt(0)) - 65][Character.getNumericValue(move.charAt(1)) - 1] == '-') {
-            moveCount++;
-            moves += "\n" + moveCount + ". " + move + " ";
+            oppMove = move;
+
             board[Character.toUpperCase(move.charAt(0)) - 65][Character.getNumericValue(move.charAt(1)) - 1] = moveMarker;
             return true;
         }
         return false;
+    }
+
+    String movesToString(boolean first){
+        moveCount++;
+        if(first) {
+            if(moveCount > 1)
+                moves += " " + oppMove;
+            moves += "\n" + moveCount + ". " + myMove;
+        }
+        else {
+            moves += "\n" + moveCount + ". " + oppMove + " " + myMove;
+        }
+
+        return moves;
     }
 
     public void myMove(char[][] child){
@@ -52,7 +68,7 @@ public class Board {
 
             }
         }
-        moves += letter + "" + (num+1);
+        myMove = letter + "" + (num+1);
     }
 
 
@@ -70,9 +86,7 @@ public class Board {
         return result;
     }
 
-    String movesToString(){
-        return moves;
-    }
+
 
 
     public char[][] getArray(){
