@@ -30,8 +30,12 @@ public class Board {
         return true;
     }
 
-    public void parceMove(String move){
-        board[Character.toUpperCase(move.charAt(0)) - 65][Character.getNumericValue(move.charAt(1)) - 1] = moveMarker;
+    public boolean parceMove(String move) {
+        if (board[Character.toUpperCase(move.charAt(0)) - 65][Character.getNumericValue(move.charAt(1)) - 1] == '-'){
+            board[Character.toUpperCase(move.charAt(0)) - 65][Character.getNumericValue(move.charAt(1)) - 1] = moveMarker;
+            return true;
+        }
+        return false;
     }
 
     String boardToString(){

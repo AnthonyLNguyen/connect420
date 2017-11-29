@@ -4,10 +4,12 @@ public class UserInterface {
 
     Scanner s;
     Board b;
+    boolean[][] movesPossible;
 
     public UserInterface() {
         s = new Scanner(System.in);
         b = new Board('O');
+        movesPossible = new boolean[8][8];
     }
 
     public String getNextMove() {
@@ -21,7 +23,11 @@ public class UserInterface {
     }
 
     public void makeMove(String move){
-        getBoard().parceMove(move);
+        String temp = move;
+        while (!getBoard().parceMove(temp)){
+            System.out.println("Invalid move assignment. Choose again!");
+            temp = s.next();
+        }
     }
 
     public Board getBoard(){

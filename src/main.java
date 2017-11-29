@@ -6,7 +6,7 @@ public class main {
         UserInterface ui = new UserInterface();
 
         minimax m = new minimax(ui.startup());
-        
+
         if (!ui.getWhoMoves()) {
             ui.makeMove(ui.getNextMove());
             ui.printBoard();
