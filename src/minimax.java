@@ -89,7 +89,7 @@ public class minimax {
                 if (count>=4)
                     return 10000000;
             }
-            else if (board[r][i] == '-');
+            else if (board[r][i] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[r][i + 1] == symbol) {
                         result -= 100;
