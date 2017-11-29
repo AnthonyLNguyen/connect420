@@ -84,8 +84,11 @@ public class minimax {
         int result = 0;
         for (int i=c;i<board.length;i++)
         {
-            if (board[r][i]==symbol)
+            if (board[r][i]==symbol) {
                 count++;
+                if (count>=4)
+                    return 10000000;
+            }
             else if (board[r][i] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[r][i + 1] == symbol) {
@@ -102,14 +105,18 @@ public class minimax {
                     result += (int) Math.pow(10, count);
             } else
                 count = 0;
-            if (count>=4)
-                return 10000000;
-        }
 
+        }
+        count = 0;
         for (int i=r;i<board.length;i++)
         {
-            if (board[i][c]==symbol)
+            if (board[i][c]==symbol) {
                 count++;
+                if (count == 4) {
+                   // System.out.println(r + " " + c);
+                    return 10000000;
+                }
+            }
             else if (board[i][c] == '-'){
                 if (count == 1) {
                     if (i < 6 &&  board[i + 1][c] == symbol) {
@@ -126,11 +133,6 @@ public class minimax {
                     result += (int) Math.pow(10, count);
             } else
                 count = 0;
-            if (count>=4) {
-
-                System.out.println(r + " " + c);
-                return 10000000;
-            }
         }
         return result;
     }
@@ -148,12 +150,21 @@ public class minimax {
 
     public int calcUtil2(char[][] b, char playerSymbol, char oppSymbol){
         int result = 0;
+        int temp = 0;
         for (int i = 0; i < b.length; i++){
             for (int j = 0; j < b[0].length; j++){
-                if (b[i][j] == playerSymbol)
-                    result += utility2(b, i, j, playerSymbol);
-                if (b[i][j] == oppSymbol)
-                    result -= utility2(b, i, j, oppSymbol);
+                if (b[i][j] == playerSymbol) {
+                    temp = utility2(b, i, j, playerSymbol);
+                    if (temp >= 10000000)
+                        return 10000000;
+                    result += temp;
+                }
+                if (b[i][j] == oppSymbol) {
+                    temp = utility2(b, i, j, playerSymbol);
+                    if (temp >= 10000000)
+                        return -10000000;
+                    result -= temp;
+                }
             }
         }
         return result;
