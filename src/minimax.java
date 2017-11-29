@@ -99,7 +99,7 @@ public class minimax {
                     }
                 } else if (count == 2){
                     if (i < 7 && board[r][i + 1] == symbol){
-                        result -= 60;
+                        result -= 100;
                         count++;
                     }
                 }
@@ -130,7 +130,7 @@ public class minimax {
                     }
                 } else if (count == 2){
                     if (i < 7 && board[i + 1][c] == symbol){
-                        result -= 60;
+                        result -= 100;
                         count++;
                     }
                 }
