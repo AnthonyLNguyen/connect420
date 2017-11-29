@@ -13,6 +13,8 @@ public class Board {
         }
     }
 
+
+
     public void placeTile(int r, int c, char t){
         board[r][c] = t;
     }

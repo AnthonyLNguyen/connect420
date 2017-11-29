@@ -147,17 +147,6 @@ public class minimax {
         return ret;
     }
 
-    public int calcUtil(char[][] b, char symbol){
-        int result = 0;
-        for (int i = 0; i < b.length; i++){
-            for (int j = 0; j < b[0].length; j++){
-                if (b[i][j] == symbol)
-                    result += (int)Math.pow(10,utility(b, i, j, symbol));
-            }
-        }
-        return result;
-    }
-
     public int calcUtil2(char[][] b, char playerSymbol, char oppSymbol){
         int result = 0;
         int[] temp = null;
@@ -166,7 +155,7 @@ public class minimax {
                 if (b[i][j] == playerSymbol) {
                     temp = utility2(b, i, j, playerSymbol);
                     //if (temp >= 10000000)
-                        //return 10000000;
+                    //return 10000000;
                     result += temp[2];
                     j = temp[0];
                     i = temp[1];
@@ -182,6 +171,90 @@ public class minimax {
         return result;
     }
 
+    double evaluate(char[][] board, char symbol, char enemy) {
+        int threeRow = nearWinRows(board, 1,symbol);
+        int twoRow = nearWinRows(board, 2,symbol);
+        int twoCol = nearWinCols(board, 2,symbol);
+        int threeCol = nearWinCols(board, 1,symbol);
+        int fourRow = nearWinRows(board,0,symbol);
+        int fourCol = nearWinCols(board,0,symbol);
+        double score = Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);
+        threeRow = nearWinRows(board, 1,enemy);
+        twoRow = nearWinRows(board, 2,enemy);
+        twoCol = nearWinCols(board, 2,enemy);
+        threeCol = nearWinCols(board, 1,enemy);
+        fourRow = nearWinRows(board,0,enemy);
+        fourCol = nearWinCols(board,0,enemy);
+        score -= Integer.max(fourCol*10000+threeCol*100+twoCol*5,fourRow*10000+threeRow*100+twoRow*5);
+        return score;
+    }
+
+
+    private int nearWinRows(char[][] board , int away,char symbol) {
+        int count = 0;
+        int length = 4 - away;
+        String match1 = strMatch(symbol, length);
+        String match2 = '-' + match1;
+        match1 += '-';
+        for (int i = 0; i < 8; i++) {
+            String row = new String(board[i]);
+            if (row.contains(match1)) {
+                int x = row.indexOf(match1);
+                while (x >= 0) {
+                    count++;
+                    x = row.indexOf(match1, match1.length() + x);
+                }
+            }
+            if (row.contains(match2)) {
+                int x = row.indexOf(match2);
+                while (x >= 0) {
+                    count++;
+                    x = row.indexOf(match2, match2.length() + x);
+                }
+            }
+        }
+        return count;
+    }
+
+    private int nearWinCols(char[][] board, int away, char symbol) {
+        int count = 0;
+        int length = 4 - away;
+        String match1 = strMatch(symbol, length);
+        String match2 = '-' + match1;
+        match1 += '-';
+        for (int j = 0; j < 8; j++) {
+            String column = "";
+            for (int i = 0; i < 8; i++) {
+                column += board[i][j];
+            }
+            if (column.contains(match1)) {
+                int x = column.indexOf(match1);
+                while (x >= 0) {
+                    count++;
+                    x = column.indexOf(match1, match1.length() + x);
+                }
+            }
+            if (column.contains(match2)) {
+                int x = column.indexOf(match2);
+                while (x >= 0) {
+                    count++;
+                    x = column.indexOf(match2, match2.length() + x);
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private String strMatch(char p, int length) {
+        String match = "";
+        for (int i = 0; i < length; i++) {
+            match += Character.toString(p);
+        }
+        return match;
+    }
+
+
     public boolean terminalTest(char[][] b){ // check if this is a winning state
         char winner;
         for (int i = 0; i < b.length; i++){
@@ -194,23 +267,22 @@ public class minimax {
         return false;
     }
 
-    public void placeTile(char[][] b, int r, int c, char t){
-        b[r][c] = t;
+    public boolean xWin(char[][] b){ // check if this is a winning state
+        char winner;
+        for (int i = 0; i < b.length; i++){
+            for (int j = 0; j < b[0].length; j++){
+                winner = checkWin(b,i,j);
+                if (winner == 'X')
+                    return true;
+            }
+        }
+        return false;
     }
-    public boolean placeTile(char[][] b, char r, int c, char t){
-        if (r < 97)
-            r += 32;
-        r -= 97;
-        c--;
-        if(b[r][c] != '-')
-            return false;
-        b[r][c] = t;
-        return true;
-    }
+
 
     int alphabeta(Board b,Node n, int depth, int alpha, int beta, boolean maxPlayer){
         if (depth == 0 || terminalTest(n.getBoard())){
-            return calcUtil(n.getBoard(),'X');
+            return (int)evaluate(n.getBoard(),'X','O');
         }
         if(maxPlayer){
             int v = Integer.MIN_VALUE;
@@ -218,8 +290,9 @@ public class minimax {
             for (Node child: succ) {
                 v = Integer.max(v,alphabeta(b,child,depth-1,alpha,beta,false));
                 alpha = Integer.max(alpha,v);
-                if (beta <= alpha)
+                if (beta <= alpha) {
                     break;
+                }
             }
             return v;
         }
@@ -229,28 +302,32 @@ public class minimax {
             for (Node child: succ) {
                 v = Integer.min(v,alphabeta(b,child,depth-1,alpha,beta,true));
                 beta = Integer.min(beta,v);
-                if (beta <= alpha)
+                if (beta <= alpha) {
                     break;
+                }
             }
             return v;
         }
     }
 
 
-    void makeMove(Board b){
+    void makeMove(Board b, int depth){
         ArrayList<Node> succ = generateSucc(new Node(null,b.getArray()),'X');
         int max = -1;
         int val;
         for (Node n:succ) {
-            val = alphabeta(b,n,4,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
+            val = alphabeta(b,n,depth,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
             if (val > max)
                 max = val;
             n.setValue(val);
         }
         for (Node n:succ) {
             if (n.getValue() == max) {
+                if(xWin(n.getBoard())){
+                    b.setBoard(n.getBoard());
+                    break;
+                }
                 b.setBoard(n.getBoard());
-                break;
             }
         }
     }
